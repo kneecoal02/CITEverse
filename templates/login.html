@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Login</title>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <link href="static/login.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+        <div class="left">
+      <div class="form-content">
+        <h1>Welcome!</h1>
+      <form action="/login_process" method="POST" class="login-card">
+        <label for="username">Username</label>
+          <input type="text" name="userfield" placeholder="Enter your username" required>
+
+          <label for="password">Password</label>
+          <input type="password" name="passfield" placeholder="Enter your password" required>
+
+          <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="right">
+      <img src="static/images/image1.png" alt="Placeholder">
+    </div>
+  </div>
+</body>
+</html>

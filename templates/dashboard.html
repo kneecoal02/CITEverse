@@ -1,0 +1,168 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="static/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container-fluid">
+    <!-- Left side: Logo + brand name -->
+    <a class="navbar-brand" href="/dashboard">
+      <img src="static/images/citeverse_logo.png" alt="CITEverse Logo">
+    </a>
+
+    <!-- Responsive toggle button -->
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Right side: Admin dropdown -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle admin-info" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ account['profile_pic'] }}" alt="Admin Photo">
+            <span class="admin-name">{{ account['admin_username'] }}</span>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+            <li><a class="dropdown-item" href="/account_settings">Account Settings</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addAdminModal">Add Admin Account</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addSiteModal">Add Sites</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Centered Cards Section -->
+  <div class="container mt-4">
+  <div class="row justify-content-center">
+    {% for i in sites %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex">
+      <div class="card w-100">
+        <!-- 🖼 Site image -->
+        {% if i['image'] %}
+          <img src="{{ i['image'] }}" class="card-img-top" alt="{{ i['site_name'] }}">
+        {% else %}
+          <img src="static/images/default_site.png" class="card-img-top" alt="Default Image">
+        {% endif %}
+
+        <div class="card-body">
+          <h5 class="card-title">{{ i['site_name'] }}</h5>
+          <p class="card-text">
+            {{ i['description'] }}
+          </p>
+          <a href="{{ i['site_link'] }}" target="_blank" class="btn btn-primary">Visit Site</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- Add Site Modal -->
+<div class="modal fade" id="addSiteModal" tabindex="-1" aria-labelledby="addSiteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color:#f78c40; color:white;">
+        <h5 class="modal-title" id="addSiteModalLabel">Add New Site</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form action="/add_site_process" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="site_name" class="form-label">Site Name</label>
+            <input type="text" name="site_name" id="site_name" class="form-control" placeholder="Enter site name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="site_link" class="form-label">Site Link</label>
+            <input type="url" name="site_link" id="site_link" class="form-control" placeholder="Enter site URL" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description (max 200 characters)</label>
+            <textarea name="description" id="description" class="form-control" rows="3" maxlength="200" placeholder="Enter description..." required></textarea>
+            <div class="text-end small text-muted"><span id="charCount">0</span>/200</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Image</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn" style="background-color:#f78c40; color:white;">Add Site</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add Admin Modal -->
+<div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color:#f78c40; color:white;">
+        <h5 class="modal-title" id="addAdminModalLabel">Add Admin Account</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form action="/add_admin_process" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="firstname" class="form-label">First Name</label>
+            <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Enter first name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="lastname" class="form-label">Last Name</label>
+            <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Enter last name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="userfield" id="username" class="form-control" placeholder="Enter username" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="passfield" id="password" class="form-control" placeholder="Enter password" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="profile_pic" class="form-label">Profile Picture</label>
+            <input type="file" name="profile_pic" id="profile_pic" class="form-control" accept="image/*" required>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn" style="background-color:#f78c40; color:white;">Add Admin</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const desc = document.getElementById('description');
+  const count = document.getElementById('charCount');
+  
+  desc.addEventListener('input', () => {
+    const length = desc.value.length;
+    count.textContent = length;
+    if (length > 200) desc.value = desc.value.substring(0, 200);
+  });
+</script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        
+    </body>
+</html>
